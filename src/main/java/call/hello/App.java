@@ -3,7 +3,7 @@ package call.hello;
 public class App
 {
 
-    private final String message = "Hello World from Java Maven Project!??????11111222233";
+    private final String message = "Hello World from Java Maven Project!";
 
     public App() {}
 
