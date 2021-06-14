@@ -1,26 +1,16 @@
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -f pom.xml -B -DskipTests clean package'
+stage('Deploy to Staging Environment'){
+            steps{
+                build job: 'deploy-application-staging-environment-pipeline'
+
             }
-            post {
-                success {
-                    echo "Now Archiving the Artifacts......"
-                    archiveArtifacts artifacts: '**/*.jar'
+            
+        }
+        stage('Deploy to Production Environment'){
+            steps{
+                timeout(time:5, unit:'DAYS'){
+                    input message:'Approve PRODUCTION Deployment?'
                 }
+                build job: 'deploy-application-production-environment-pipeline'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'mvn -f pom.xml test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-    }
-}
+        
